@@ -1,9 +1,12 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public struct RecordDataModel
 {
+    [SerializeField]
     private string _recordHolderName;
+    [SerializeField]
     private float _time;
 
     public RecordDataModel(string recordHolderName, float time)

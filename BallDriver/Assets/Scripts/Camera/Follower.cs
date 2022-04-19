@@ -8,6 +8,8 @@ public class Follower : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_target == null) return;
+
         transform.position = _target.position + _offetVector;
     }
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(BallMover))]
-public class BallPresenter : MonoBehaviour
+public class BallPresenter : MonoBehaviour, IWinable, ILoseable
 {
     
     private PlayerInput _input;
@@ -34,6 +34,11 @@ public class BallPresenter : MonoBehaviour
     private void HorizontalInput(float value)
     {
         _mover.MoveSideways(value);
+    }
+
+    void IDestroyable.DestroySelf()
+    {
+        Destroy(gameObject);
     }
 
 }

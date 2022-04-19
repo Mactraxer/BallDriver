@@ -2,15 +2,15 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class WinTrigger : MonoBehaviour
+public class LoseTrigger : MonoBehaviour
 {
 
-    public Action<IWinable> OnDetectObject;
+    public Action<ILoseable> OnDetectObject;
 
     private void OnTriggerEnter(Collider other)
-    { 
+    {
 
-        IWinable component;
+        ILoseable component;
 
         if (other.TryGetComponent(out component))
         {

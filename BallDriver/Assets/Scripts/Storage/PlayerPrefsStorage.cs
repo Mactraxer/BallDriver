@@ -7,27 +7,28 @@ public class PlayerPrefsStorage
     private JSONSerializer _jsonSerializer;
     private const string RECORDS_COUNT_KEY = "Records";
     private int _recordsCount;
-    private int _currentRecord;
-
 
     public void SetupStorage()
     {
         _jsonSerializer = new JSONSerializer();
         _recordsCount = PlayerPrefs.GetInt(RECORDS_COUNT_KEY, 0);
-        _currentRecord = 0;
+        
 
         if (_recordsCount == 0)
         {
             PlayerPrefs.SetInt(RECORDS_COUNT_KEY, 0);
         }
+
     }
 
     public void PersistRecord(RecordDataModel model)
     {
         string json = _jsonSerializer.ConvertToJSON(model);
-        PlayerPrefs.SetString($"{_currentRecord}", json);
+        PlayerPrefs.SetString($"{_recordsCount}", json);
+        
         _recordsCount++;
-        _currentRecord++;
+        PlayerPrefs.SetInt(RECORDS_COUNT_KEY, _recordsCount);
+        PlayerPrefs.Save();
     }
 
     public List<RecordDataModel> ReadAllRecords()
@@ -36,7 +37,8 @@ public class PlayerPrefsStorage
 
         for (int i = 0; i < _recordsCount; i++)
         {
-            RecordDataModel model = _jsonSerializer.ConvertFromJSON<RecordDataModel>(PlayerPrefs.GetString($"{i}"));
+            var json = PlayerPrefs.GetString($"{i}");
+            RecordDataModel model = _jsonSerializer.ConvertFromJSON<RecordDataModel>(json);
             _models.Add(model);
         }
 
