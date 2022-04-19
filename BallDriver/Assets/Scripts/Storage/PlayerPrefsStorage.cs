@@ -1,48 +1,28 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPrefsStorage
+public class PlayerPrefsStorage : IStorage
 {
 
-    private JSONSerializer _jsonSerializer;
-    private const string RECORDS_COUNT_KEY = "Records";
-    private int _recordsCount;
-
-    public void SetupStorage()
+    void IStorage.PersistIntValue(int value, string key)
     {
-        _jsonSerializer = new JSONSerializer();
-        _recordsCount = PlayerPrefs.GetInt(RECORDS_COUNT_KEY, 0);
-        
-
-        if (_recordsCount == 0)
-        {
-            PlayerPrefs.SetInt(RECORDS_COUNT_KEY, 0);
-        }
-
-    }
-
-    public void PersistRecord(RecordDataModel model)
-    {
-        string json = _jsonSerializer.ConvertToJSON(model);
-        PlayerPrefs.SetString($"{_recordsCount}", json);
-        
-        _recordsCount++;
-        PlayerPrefs.SetInt(RECORDS_COUNT_KEY, _recordsCount);
+        PlayerPrefs.SetInt(key, value);
         PlayerPrefs.Save();
     }
 
-    public List<RecordDataModel> ReadAllRecords()
+    void IStorage.PersistStringValue(string value, string key)
     {
-        List<RecordDataModel> _models = new List<RecordDataModel>();
+        PlayerPrefs.SetString(key, value);
+        PlayerPrefs.Save();
+    }
 
-        for (int i = 0; i < _recordsCount; i++)
-        {
-            var json = PlayerPrefs.GetString($"{i}");
-            RecordDataModel model = _jsonSerializer.ConvertFromJSON<RecordDataModel>(json);
-            _models.Add(model);
-        }
+    int IStorage.ReadIntValue(string key)
+    {
+        return PlayerPrefs.GetInt(key);
+    }
 
-        return _models;
+    string IStorage.ReadStringValue(string key)
+    {
+        return PlayerPrefs.GetString(key);
     }
 
 }

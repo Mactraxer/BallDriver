@@ -7,7 +7,7 @@ public class LoseTrigger : MonoBehaviour
 
     public Action<ILoseable> OnDetectObject;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerExit(Collider other)
     {
 
         ILoseable component;

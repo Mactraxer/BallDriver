@@ -7,7 +7,7 @@ public class DeadTrigger : MonoBehaviour
 
     public Action<IDeadable> OnDetectObject;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerExit(Collider other)
     {
 
         IDeadable component;

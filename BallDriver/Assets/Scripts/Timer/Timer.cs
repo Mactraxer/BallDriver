@@ -5,6 +5,8 @@ public class Timer
 
     private float _startTime;
 
+    public float CurrentTime => Time.fixedTime - _startTime;
+
     public void Record()
     {
         _startTime = Time.fixedTime;

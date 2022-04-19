@@ -13,6 +13,8 @@ public class RecodsScreen : MonoBehaviour
     [SerializeField] private Button _restartButton;
     [SerializeField] private Button _exitButton;
 
+    private List<RecordDataModel> _recordModels;
+
     public Action OnClickRestartButton;
     public Action OnClickExitButton;
 
@@ -33,7 +35,10 @@ public class RecodsScreen : MonoBehaviour
         _endGameReason.text = endGameReason;
 
         _panel.SetActive(true);
-        DisplayData(records);
+
+        _recordModels = records;
+        SortRecords();
+        DisplayData(_recordModels);
     }
 
     public void Dismiss()
@@ -41,17 +46,31 @@ public class RecodsScreen : MonoBehaviour
         _panel.SetActive(false);
     }
 
+    private void SortRecords()
+    {
+        _recordModels.Sort((x, y) => x.Time.CompareTo(y.Time));
+    }
+
     private void DisplayData(List<RecordDataModel> records)
     {
+        if (records.Count == 0) { DisplayEmptyRecords(); return; }
 
         foreach (var item in records)
         {
             GameObject record = Instantiate(_recordTextPrefab, _recordsScrollRect.content);
 
             var recordText = record.GetComponent<Text>();
-            recordText.text = $"{item.RecordHolderName} = {item.Time}s";           
+            recordText.text = String.Format("{0} = {1:f}s", item.RecordHolderName, item.Time);           
         }
         
+    }
+
+    private void DisplayEmptyRecords()
+    {
+        GameObject record = Instantiate(_recordTextPrefab, _recordsScrollRect.content);
+
+        var recordText = record.GetComponent<Text>();
+        recordText.text = "Records list is empty";
     }
 
     private void RestartAction()

@@ -1,11 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(MovementInput))]
 [RequireComponent(typeof(BallMover))]
 public class BallPresenter : MonoBehaviour, IWinable, ILoseable
 {
-    
-    private PlayerInput _input;
+
+    [SerializeField] private Text _speedText;
+
+    private MovementInput _input;
     private BallMover _mover;
 
     private void OnEnable()
@@ -20,10 +23,20 @@ public class BallPresenter : MonoBehaviour, IWinable, ILoseable
         _input.HorizontalInputAction -= HorizontalInput;
     }
 
+    private void OnDestroy()
+    {
+        _speedText.enabled = false;
+    }
+
     private void Awake()
     {
-        _input = GetComponent<PlayerInput>();
+        _input = GetComponent<MovementInput>();
         _mover = GetComponent<BallMover>();
+    }
+
+    private void FixedUpdate()
+    {
+        _speedText.text = string.Format("Speed = {0:f} m/s", _mover.CurrentSpeed);
     }
 
     private void VerticalInput(float value)
